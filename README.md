@@ -1,6 +1,8 @@
 # Luna
 my startpage
 
+![preview](img/luna.gif)
+
 ---
 
 ### Configuration
