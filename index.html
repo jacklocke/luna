@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ジェイ</title>
+        <title>Luna</title>
         <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="config.js"></script>
+
+        <script>
+          try {
+            var mydata = JSON.parse(config);
+            var lang = JSON.parse(this[mydata.lang]);
+          } catch (error) {
+            alert("Are you sure you have a valid config.js file?");
+          }
+
+
+
+        </script>
 
     </head>
     <body>
@@ -32,8 +45,16 @@
         <div id="datebox"></div>
 
 <script type="text/javascript">
-var tday=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-var tmonth=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var tday = [];
+Object.keys(lang["days"]).forEach(function(key) {
+  tday.push(lang["days"][key]);
+});
+
+var tmonth = [];
+Object.keys(lang["months"]).forEach(function(key) {
+  tmonth.push(lang["months"][key]);
+});
+
 
 function GetClock(){
 var d=new Date();
@@ -47,48 +68,63 @@ GetClock();
 setInterval(GetClock,1000);
 </script>
 
-
-
       </div>
-     
+      
       <img src="skyline.gif" alt="skyline">
-
-
+      
         <nav>
           
-            <ul>
-              <li><a href="https://nx18511.your-storageshare.de/">nextcloud</a></li>
-              <li><a href="https://www.reddit.com/">reddit</a></li>
-              <li><a href="https://www.netflix.com/">netflix</a></li>
-              <li><a href="https://fosstodon.org/">fosstodon</a></li>
-            </ul>
+            <ul id="listA"></ul>
         
-            <ul>
-              <li><a href="https://anilist.co/home">anilist</a></li>
-              <li><a href="https://app.plex.tv/desktop/#!/">plex</a></li>
-            </ul>
+            <ul id="listB"></ul>
         
-            <ul>
-              <li><a href="https://boards.4channel.org/sci/">/sci/</a></li>
-              <li><a href="https://boards.4channel.org/fit/">/fit/</a></li>
-              <li><a href="https://boards.4channel.org/lit/">/lit/</a></li>
-            </ul>
+            <ul id="listC"></ul>
 
-            <ul>
-              <li><a href="https://mail.protonmail.com/u/0/inbox">protonmail</a></li>
-              <li><a href="https://app.thestorygraph.com/">storygraph</a></li>
-              <li><a href="https://www.amazon.co.uk/">amazon</a></li>
-            </ul>
+            <ul id="listD"></ul>
 
+            <script>
+
+              function listGenerator(column) {
+                var ul; var li; var a;
+          
+                ul = document.getElementById("list"+column);
+                Object.keys(JSON.parse(links)[column]).forEach(function(key) {
+                  li = document.createElement("li");
+                  a = document.createElement("a");
+                  a.appendChild(document.createTextNode(key));
+                  a.setAttribute("href", JSON.parse(links)[column][key]);
+                  li.appendChild(a);
+                  ul.appendChild(li);
+                });
+              }
+
+              listGenerator("A");
+              listGenerator("B");
+              listGenerator("C");
+              listGenerator("D");
+            </script>
             
 
           </nav>
+          <!-- GOOGLE -->
+          <form action="https://google.com/search" method="GET" target="_blank">
+            <input autofocus
+                  name="q"
+                  type="search"
+                  placeholder="search...                   "
+                  autocomplete="off"
+                  tabindex="1">
+          </form>
+          <!-- DUCKDUCKGO -->
+          <!--
           <form action="https://duckduckgo.com/" method="GET" target="_blank">
             <input autofocus
-                   name="q"
-                   type="search"
-                   placeholder="search..."
-                    tabindex="1">
+                  name="q"
+                  type="search"
+                  placeholder="search...                   "
+                  autocomplete="off"
+                  tabindex="1">
           </form>
+          -->
     </body>
 </html>
