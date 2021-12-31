@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="index.css">
+
+</head>
+<body>
+    <script>
+
+        function makeid(length) {
+            var result           = '';
+            var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        $.getJSON( "../config.json", function( data ) {
+
+            $.each( data, function( key, val ) {
+
+                if(typeof val == 'string'){
+
+                    if(key == 'lang'){
+
+                        $("#editor").append('<label>Language</label>\
+                            <select name="'+key+'" id="'+key+'">\
+                                <option value="en">English</option>\
+                                <option value="it">Italian</option>\
+                                <option value="fr">Français</option>\
+                            </select>\
+                        <br><br>');
+
+                        $("#"+key).val(val);
+
+                    } else if(key == 'search') {
+
+                        $("#editor").append('<label>Search Enginge:</label>\
+                        <select name="'+key+'" id="'+key+'">\
+                            <option value="DuckDuckGo">DuckDuckDNS</option>\
+                            <option value="Google">Google</option>\
+                        </select>\
+                        <br><br>');
+
+                        $("#"+key).val(val);
+
+                    } else {
+                        alert(key + " not managed!");
+                    };
+
+                } else if(typeof val =='object') {
+
+                    var linkArea = "";
+
+                    linkArea+='\
+                            <label>Links</label>\
+                            <div class="parent">';
+
+                    $.each (val, function(key2, lnks){
+                        linkArea+='\
+                                <div id="'+key2+'block" class="box">\
+                                    '+getBlocco(lnks, key2)+'\
+                                </div>';
+                    });
+
+                    linkArea+='\
+                            </div><br><br>';
+
+                    $("#editor").append(linkArea);
+
+                } else {
+                    alert(key + " is not managed!");
+                }
+
+                
+            });
+        });
+
+
+        function getBlocco(obj, col) {
+            retData = '';
+            $.each(obj , function(key, val){
+
+                retData+= newDivLink(key, val);
+
+            });
+
+            retData+=newAddButton(col);
+
+            return retData;
+        }
+
+        function newDivLink(key, val) {
+            var ret = "";
+            ret+="<div id=\""+makeid(5)+"\" class=\"b\">";
+            ret+=" <input value='"+key+"' placeholder=\"text\"></input>";
+            ret+=" <input value='"+val+"' placeholder=\"http://...\"></input>";
+            ret+=" <button class=\"delBTN\" onclick='this.parentElement.remove();'>X</button>";
+            ret+="</div>";
+            return ret;
+        }
+
+        function newAddButton(col){
+            return "<button id=\"add"+col+"\" class=\"newBTN\" onclick='addNewButton(this);'>[ADD]</button>";
+        }
+
+        function addNewButton(where){
+            var addNew = newDivLink("", "");
+            var col = where.id.substring(3);
+            $(where).parent().append(addNew);
+
+            if ($("#add"+col).length) {
+                $("#add"+col).remove();
+            };
+            $("#"+col+"block").append(newAddButton(col));
+        }
+        
+        function logJSON(){
+            var data = new Object();
+            data.lang = $("#lang").val();
+            data.search = $("#search").val();
+
+            var links = new Object();
+
+            links["A"] = getLinkBlock("A");
+            links["B"] = getLinkBlock("B");
+            links["C"] = getLinkBlock("C");
+            links["D"] = getLinkBlock("D");
+            data.links = links;
+
+            console.log(data);
+            $('#jsonArea').text(prettyPrint(JSON.stringify(data)));
+
+        }
+
+        function prettyPrint(ugly) {
+            var obj = JSON.parse(ugly);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            return pretty;
+        }
+
+        function getLinkBlock(col){
+            var linkBlock = new Object();
+
+            var link;
+            var k;
+            var l;
+
+            $('#'+col+'block > div').each( function(i, divBlock) {
+                
+                link = new Object();
+                k = "";
+                l = "";
+
+                $("#"+divBlock.id+" > input").each( function(i, b) {
+                    if(b.placeholder == "text"){
+                        k = b.value;
+                    } else if(b.placeholder == "http://..."){
+                        l = b.value;
+                    } else {
+                        alert("Error! Placeholder "+b.placeholder+" not managed!");
+                    }
+                    
+                });
+
+                linkBlock[k] = l;
+            })
+
+            return linkBlock;
+        }
+
+    </script>
+
+    <div id="editor"></div>
+
+    <button id="save" class="editBTN" onclick="logJSON()">Generate</button>
+
+    <textarea id="jsonArea"></textarea>
+
+</body>
+</html>

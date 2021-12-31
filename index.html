@@ -5,6 +5,13 @@
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+        <script>
+
+          //TO DISABLE PHP EDITOR CHANGE THIS:
+          var editorEnabled = false;
+
+        </script>
+
     </head>
     <body>
       <div id=scanlines></div>
@@ -47,24 +54,20 @@
             <script>
               $.getJSON( "./config.json", function( data ) {
 
-                $.each( data, function( key, val ) {
-                    if(key == 'lang'){
-                        setLanguage(val);
-                    } else if(key == 'search') {
-                        setSearch(val);
-                    } else {
-                        $.each( val[0], function( key2, lnks ) {
-                            listGenerator(key2, lnks); // A B C D, array of links
-                        });
-                    }
-                });
+                setLanguage(data.lang);
+                setSearch(data.search);
 
+                listGenerator("A", data.links["A"]);
+                listGenerator("B", data.links["B"]);
+                listGenerator("C", data.links["C"]);
+                listGenerator("D", data.links["D"]);
+                
               }).fail(function() { alert("Error! Please check config.json."); })
 
               function listGenerator(column, lnk) {
                 var ul; var li; var a;
           
-                $.each( lnk[0], function( name, lnk ) {
+                $.each( lnk, function( name, lnk ) {
                       
                   ul = document.getElementById("list"+column);
                     li = document.createElement("li");
@@ -134,6 +137,31 @@
               }
             }
           </script>
+
+    <script>
+      var xhr = new XMLHttpRequest();
+      if (editorEnabled){
+        try {
+          xhr.open("GET", "./php/check.php", true);
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+              if (xhr.status == 200) {
+                console.log("PHP is enabled");
+                editor();
+              }
+            }
+          }
+          xhr.send();
+        } catch (err) {
+          console.log("PHP is disabled");
+        }
+      }
+
+      function editor(){
+        // TODO...
+      }
+
+    </script>
 
     </body>
 </html>
