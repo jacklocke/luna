@@ -1,0 +1,26 @@
+{
+    "lang" : "en",
+    "search" : "DuckDuckGo",
+    "links" : [{
+        "A" : [{
+            "nextcloud" : "https://nx18511.your-storageshare.de/",
+            "reddit" : "https://www.reddit.com/",
+            "netflix" : "https://www.netflix.com/",
+            "fosstodon" : "https://fosstodon.org/"
+        }],
+        "B" : [{
+            "anilist" : "https://anilist.co/home",
+            "plex" : "https://app.plex.tv/desktop/#!/"
+        }],
+        "C" : [{
+            "/sci/" : "https://boards.4channel.org/sci/",
+            "/fit/" : "https://boards.4channel.org/fit/",
+            "/lit/" : "https://boards.4channel.org/lit/"
+        }],
+        "D" : [{
+            "protonmail" : "https://mail.protonmail.com/u/0/inbox",
+            "storygraph" : "https://app.thestorygraph.com/",
+            "amazon" : "https://www.amazon.co.uk/"
+        }]
+    }]
+}

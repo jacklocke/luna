@@ -1,0 +1,23 @@
+{ "en" : [{
+    "d1" : "Sunday",
+    "d2" : "Monday",
+    "d3" : "Tuesday",
+    "d4" : "Wednesday",
+    "d5" : "Thursday",
+    "d6" : "Friday",
+    "d7" : "Saturday",
+
+    "m1" : "January",
+    "m2" : "February",
+    "m3" : "March",
+    "m4" : "April",
+    "m5" : "May",
+    "m6" : "June",
+    "m7" : "July",
+    "m8" : "August",
+    "m9" : "September",
+    "m10" : "October",
+    "m11" : "November",
+    "m12" : "December"
+    }]
+}

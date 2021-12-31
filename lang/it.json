@@ -1,0 +1,23 @@
+{ "en" : [{
+    "d1" : "Domenica",
+    "d2" : "Lunedi",
+    "d3" : "Martedi",
+    "d4" : "Mercoledi",
+    "d5" : "Giovedi",
+    "d6" : "Venerdi",
+    "d7" : "Sabato",
+
+    "m1" : "Gennaio",
+    "m2" : "Febbraio",
+    "m3" : "Marzo",
+    "m4" : "Aprile",
+    "m5" : "Maggio",
+    "m6" : "Giugno",
+    "m7" : "Luglio",
+    "m8" : "Agosto",
+    "m9" : "Settembre",
+    "m10" : "Ottobre",
+    "m11" : "Novembre",
+    "m12" : "Dicembre"
+    }]
+}

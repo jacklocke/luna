@@ -3,24 +3,13 @@
     <head>
         <title>Luna</title>
         <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="config.js"></script>
-
-        <script>
-          try {
-            var mydata = JSON.parse(config);
-            var lang = JSON.parse(this[mydata.lang]);            
-          } catch (error) {
-            alert("Are you sure you have a valid config.js file?");
-          }
-        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     </head>
     <body>
       <div id=scanlines></div>
       <div class="clock-box">
-
         
-
         <div id="clockbox"></div>
 
         <script type="text/javascript">
@@ -41,30 +30,6 @@
 
         <div id="datebox"></div>
 
-<script type="text/javascript">
-var tday = [];
-Object.keys(lang["days"]).forEach(function(key) {
-  tday.push(lang["days"][key]);
-});
-
-var tmonth = [];
-Object.keys(lang["months"]).forEach(function(key) {
-  tmonth.push(lang["months"][key]);
-});
-
-
-function GetClock(){
-  var d=new Date();
-  var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate(),nyear=d.getFullYear();
-
-  var clocktext=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+", "+nyear+"";
-  document.getElementById('datebox').innerHTML=clocktext;
-}
-
-GetClock();
-setInterval(GetClock,1000);
-</script>
-
       </div>
       
       <img src="skyline.gif" alt="skyline">
@@ -80,25 +45,69 @@ setInterval(GetClock,1000);
             <ul id="listD"></ul>
 
             <script>
+              $.getJSON( "./config.json", function( data ) {
 
-              function listGenerator(column) {
+                $.each( data, function( key, val ) {
+                    if(key == 'lang'){
+                        setLanguage(val);
+                    } else if(key == 'search') {
+                        setSearch(val);
+                    } else {
+                        $.each( val[0], function( key2, lnks ) {
+                            listGenerator(key2, lnks); // A B C D, array of links
+                        });
+                    }
+                });
+
+              }).fail(function() { alert("Error! Please check config.json."); })
+
+              function listGenerator(column, lnk) {
                 var ul; var li; var a;
           
-                ul = document.getElementById("list"+column);
-                Object.keys(JSON.parse(links)[column]).forEach(function(key) {
-                  li = document.createElement("li");
-                  a = document.createElement("a");
-                  a.appendChild(document.createTextNode(key));
-                  a.setAttribute("href", JSON.parse(links)[column][key]);
-                  li.appendChild(a);
-                  ul.appendChild(li);
+                $.each( lnk[0], function( name, lnk ) {
+                      
+                  ul = document.getElementById("list"+column);
+                    li = document.createElement("li");
+                    a = document.createElement("a");
+                    a.appendChild(document.createTextNode(name)); // label of link
+                    a.setAttribute("href", lnk); // URL link
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                    
                 });
               }
 
-              listGenerator("A");
-              listGenerator("B");
-              listGenerator("C");
-              listGenerator("D");
+              // LANGUAGE
+              var tday = [];
+              var tmonth = [];
+
+              function setLanguage(lang) {
+                $.getJSON( "./lang/"+lang+".json", function( language ) {
+                  $.each( language, function( klang, val ) {
+                      for (var i = 1; i <= 7; i++) {
+                          tday[i] = val[0]["d"+i];
+                      }
+                      for (var i = 1; i <= 12; i++) {
+                          tmonth[i] = val[0]["m"+i];
+                      }
+
+                      // start the clock
+                      GetClock();
+                      setInterval(GetClock,1000);
+
+                  });
+                });
+              };
+
+              function GetClock(){
+                var d=new Date();
+                var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate(),nyear=d.getFullYear();
+
+                var clocktext=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+", "+nyear+"";
+                document.getElementById('datebox').innerHTML=clocktext;
+              }
+
+              
             </script>
             
 
@@ -114,13 +123,15 @@ setInterval(GetClock,1000);
 
           <script>
             var form = document.getElementById("searchForm");
-            switch (mydata.search) {
-              case "Google":
-                form.setAttribute("action", "https://www.google.com/search");
-                break;
-                default: //"DuckDuckGo"
-                  form.setAttribute("action", "https://duckduckgo.com/");
+            function setSearch(search){
+              switch (search) {
+                case "Google":
+                  form.setAttribute("action", "https://www.google.com/search");
                   break;
+                default: //"DuckDuckGo"
+                    form.setAttribute("action", "https://duckduckgo.com/");
+                  break;
+              }
             }
           </script>
 
