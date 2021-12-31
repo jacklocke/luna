@@ -67,6 +67,7 @@
                     $.each (val, function(key2, lnks){
                         linkArea+='\
                                 <div id="'+key2+'block" class="box">\
+                                    <label class="blkTitle">['+key2+']</label>\
                                     '+getBlocco(lnks, key2)+'\
                                 </div>';
                     });
@@ -101,8 +102,8 @@
         function newDivLink(key, val) {
             var ret = "";
             ret+="<div id=\""+makeid(5)+"\" class=\"b\">";
-            ret+=" <input value='"+key+"' placeholder=\"text\"></input>";
-            ret+=" <input value='"+val+"' placeholder=\"http://...\"></input>";
+            ret+=" <input value='"+key+"' class='lblLink' placeholder=\"text\"></input>";
+            ret+=" <input value='"+val+"' class='reaLink' placeholder=\"http://...\"></input>";
             ret+=" <button class=\"delBTN\" onclick='this.parentElement.remove();'>X</button>";
             ret+="</div>";
             return ret;
