@@ -18,6 +18,7 @@
             "/lit/" : "https://boards.4channel.org/lit/"
         },
         "D" : {
+            "luna-editor": "./edit/index.html",
             "protonmail" : "https://mail.protonmail.com/u/0/inbox",
             "storygraph" : "https://app.thestorygraph.com/",
             "amazon" : "https://www.amazon.co.uk/"

@@ -15,6 +15,19 @@ Edit **config.json**:
 
 _You can also add a language in "lang" folder._
 
+
+---
+
+### Editor
+
+![preview](img/editor.png)
+
+You can also edit _config.json_ file with the editor.
+
+If PHP is enabled, it can also save the configuration file.
+
+If, for security, you don't want editor, just delete **edit** folder.
+
 ---
 
 __Forks__

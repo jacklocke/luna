@@ -4,14 +4,6 @@
         <title>Luna</title>
         <link rel="stylesheet" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-        <script>
-
-          //TO DISABLE PHP EDITOR CHANGE THIS:
-          var editorEnabled = false;
-
-        </script>
-
     </head>
     <body>
       <div id=scanlines></div>
@@ -86,6 +78,7 @@
 
               function setLanguage(lang) {
                 $.getJSON( "./lang/"+lang+".json", function( language ) {
+
                   $.each( language, function( klang, val ) {
                       for (var i = 1; i <= 7; i++) {
                           tday[i] = val[0]["d"+i];
@@ -104,7 +97,7 @@
 
               function GetClock(){
                 var d=new Date();
-                var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate(),nyear=d.getFullYear();
+                var nday=d.getDay()+1,nmonth=d.getMonth()+1,ndate=d.getDate(),nyear=d.getFullYear();
 
                 var clocktext=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+", "+nyear+"";
                 document.getElementById('datebox').innerHTML=clocktext;
@@ -137,31 +130,5 @@
               }
             }
           </script>
-
-    <script>
-      var xhr = new XMLHttpRequest();
-      if (editorEnabled){
-        try {
-          xhr.open("GET", "./php/check.php", true);
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-              if (xhr.status == 200) {
-                console.log("PHP is enabled");
-                editor();
-              }
-            }
-          }
-          xhr.send();
-        } catch (err) {
-          console.log("PHP is disabled");
-        }
-      }
-
-      function editor(){
-        // TODO...
-      }
-
-    </script>
-
     </body>
 </html>

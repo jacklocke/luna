@@ -13,6 +13,9 @@
 <body>
     <script>
 
+        //change this if you don't want console log for PHP check
+        var phpCheck = true;
+
         function makeid(length) {
             var result           = '';
             var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -124,6 +127,9 @@
             $("#"+col+"block").append(newAddButton(col));
         }
         
+        var resJSON = '';
+        var first = true;
+
         function logJSON(){
             var data = new Object();
             data.lang = $("#lang").val();
@@ -137,8 +143,26 @@
             links["D"] = getLinkBlock("D");
             data.links = links;
 
-            console.log(data);
-            $('#jsonArea').text(prettyPrint(JSON.stringify(data)));
+            resJSON = prettyPrint(JSON.stringify(data));
+            //console.log(data);
+            $('#jsonArea').text(resJSON);
+
+            // show, scroll screen and select text for copy
+            $('#jsonArea').css("display", "block");
+            window.scrollTo(0,document.body.scrollHeight);
+            $('#jsonArea').select();
+
+            try{
+                navigator.clipboard.write(resJSON);
+                alert("Copied JSON in clipboard!");
+            } catch (e) {
+                //no copy to clipboard but is selected
+            }
+
+            if(first){
+                $('#btnArea').append('</br></br><label style="margin:10px;">this will be the content of config.json file:</label>');
+                first = false;
+            }
 
         }
 
@@ -178,13 +202,65 @@
             return linkBlock;
         }
 
+
+        // check if PHP is available
+        var xhr = new XMLHttpRequest();
+        var checker = false;
+        if (phpCheck){
+            try {
+                xhr.open("GET", "./php/check.php", true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            console.log("PHP is enabled");
+                            checker = true;
+                            phpFunction();
+                        }
+                    }
+                }
+                xhr.send();
+            } catch (err) {
+                console.log("PHP is disabled");
+            }
+        }
+
+        function phpFunction(){
+            var savBtn = '';
+            savBtn+='<button class="editBTN" onclick="saveFile()">SAVE FILE</button>';
+            $('#btnArea').append(savBtn);
+        }
+
+        // available only with php
+        function saveFile(){
+
+            if(resJSON!=''){
+
+                $.ajax({
+                    url: './php/save.php',
+                    type: 'POST',
+                    data: {data : resJSON},
+                    success: function(ret) {
+                        alert(ret);
+                    },
+                    error: function(e) {
+                        alert("Error...");
+                    }
+                });
+
+            } else {
+                alert("first click on [GENERATE] please")
+            }
+        }
+
     </script>
 
     <div id="editor"></div>
 
-    <button id="save" class="editBTN" onclick="logJSON()">Generate</button>
+    <div id="btnArea">
+        <button id="save" class="editBTN" onclick="logJSON()">Generate</button>
+    </div>
 
-    <textarea id="jsonArea"></textarea>
+    <textarea id="jsonArea" readonly style="display:none;height:500px;"></textarea>
 
 </body>
 </html>
